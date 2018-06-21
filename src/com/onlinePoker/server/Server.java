@@ -37,16 +37,21 @@ public class Server {
 				BufferedReader in = new BufferedReader(new InputStreamReader(soc.getInputStream()));
 				PrintWriter out = new PrintWriter(soc.getOutputStream(), true);
 				
+				System.out.println("New connection established.");
 				out.println("Please enter an username.");
 				
 				String username = null;
 				username = in.readLine();
+				
 				while(!validUser(username)) {
 					out.println("Invalid username or the username has been used by others.");
 					username = in.readLine();
 				}
+				out.println("Username accepted");
 				
 				playerHandlers.add(new playerHandler(soc, username, numPlayer));
+				
+				playerHandlers.get(numPlayer).start();
 				
 				numPlayer += 1;
 				System.out.println("Player#" + numPlayer + ", " + username + ", connected!");
@@ -80,7 +85,7 @@ public class Server {
 	
 	private boolean validUser(String s) {
 		
-		if(s == null) {
+		if(s == null || s.equals("")) {
 			return false;
 		}
 		

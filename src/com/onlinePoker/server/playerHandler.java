@@ -44,6 +44,15 @@ public class playerHandler extends Thread {
 		// TODO Auto-generated method stub
 		super.run();
 		
+		/* TEST */
+		while(true) {
+			try {
+				sleep(600);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		
 		
 		
