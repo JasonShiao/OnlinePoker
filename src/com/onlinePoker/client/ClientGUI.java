@@ -80,29 +80,23 @@ public class ClientGUI extends JFrame implements Runnable {
 	@Override
 	public void run() {
 		
-		showSettingPage();
+		//showSettingPage();
 		
 		
 		
 	}
 	
 	
-	public void showSettingPage() {
+	public void showIPSettingPage() {
 		
 		lblInit.setText("Enter server IP Address");
 		txtInit.setText("localhost");
-		txtInit.selectAll();
 		
 		btnConfirm.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				client.setServerIP(txtInit.getText());
-				try {
-					client.Connect();
-				} catch (IOException e1) {
-					e1.printStackTrace();
-					System.out.println("Invalid IP Address or Connection Error");
-				} finally {
-					showUsernameSettingPage();
+				if( !client.isServerIPFlag() ) {
+					client.setServerIP(txtInit.getText());		
+					client.setServerIPFlag(true);
 				}
 			}
 		});
@@ -119,27 +113,18 @@ public class ClientGUI extends JFrame implements Runnable {
 			btnConfirm.removeActionListener(listener);
 		}
 		btnConfirm.addActionListener(new ActionListener() {
-			
 			public void actionPerformed(ActionEvent e) {
-				
-				btnConfirm.setEnabled(false);
-				try {
-					if(client.setUsername(txtInit.getText())){
-						System.out.println("username set: " + client.getUsername());
-					} else {
-						btnConfirm.setEnabled(true);
-						System.out.println("Invalid username or the username has been used by others.");
-					}
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					System.out.println("Error occurs when sending packets to server!");
+				if( !client.isUsernameFlag() ) {
+					client.setUsername(txtInit.getText());
+					client.setUsernameFlag(true);
 				}
-				
 			}
-			
 		});
-		
-		
+	}
+
+	public void showGamepanel() {
+		Initpanel.setVisible(false);
+		Gamepanel.setVisible(true);
 	}
 	
 	

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketException;
 
 public class ClientSocketHandler extends Thread {
 	
@@ -13,10 +14,10 @@ public class ClientSocketHandler extends Thread {
 	private BufferedReader in;
 	private PrintWriter out;
 
-	public ClientSocketHandler(String serverIP) throws IOException {
+	public ClientSocketHandler(Socket soc) throws IOException {
 		
 		super();
-		this.soc = new Socket(serverIP, 9000);
+		this.soc = soc;
 		
 		in = new BufferedReader(new InputStreamReader(this.soc.getInputStream()));
 		out = new PrintWriter(this.soc.getOutputStream(), true);
@@ -31,10 +32,22 @@ public class ClientSocketHandler extends Thread {
 		super.run();
 		
 		
+		while(true) {
+			try {
+				soc.setSoTimeout(500);
+				String fromServer = in.readLine();
+				if(!fromServer.equals("") && fromServer != null) {
+					System.out.println(fromServer);
+				}
+			} catch (IOException e) {
+				
+			}
+		}
+		
 	}
 	
 	public String sendToServer(String message) throws IOException {
-		
+		soc.setSoTimeout(0);
 		out.println(message);
 		return in.readLine();
 	}
